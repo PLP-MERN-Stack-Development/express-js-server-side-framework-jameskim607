@@ -1,62 +1,189 @@
-# Express.js RESTful API Assignment
+markdown
+# Express.js Products API
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+A RESTful API for managing products built with Express.js, featuring CRUD operations, authentication, validation, and advanced querying capabilities.
 
-## Assignment Overview
+## Features
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+- ✅ Complete CRUD operations for products
+- ✅ Custom middleware for logging, authentication, and validation
+- ✅ Comprehensive error handling
+- ✅ Advanced filtering, pagination, and search
+- ✅ Product statistics endpoint
+- ✅ Input validation and error handling
 
-## Getting Started
+## Setup Instructions
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+1. **Clone the repository**
+   ```bash
+   git clone <your-repository-url>
+   cd express-products-api
+Install dependencies
 
-## Files Included
+bash
+npm install
+Set up environment variables
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+bash
+cp .env.example .env
+Edit .env with your preferred values.
 
-## Requirements
+Start the server
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+bash
+npm start
+For development with auto-restart:
 
-## API Endpoints
+bash
+npm run dev
+Access the API
+The server will run on http://localhost:3000
 
-The API will have the following endpoints:
+API Documentation
+Authentication
+Include the API key in the x-api-key header for protected routes (POST, PUT, DELETE).
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+Endpoints
+GET /
+Description: Welcome message and API documentation
 
-## Submission
+Response: API information and available endpoints
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+GET /api/products
+Description: Get all products with optional filtering and pagination
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+Query Parameters:
 
-## Resources
+category (string): Filter by category
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+inStock (boolean): Filter by stock status
+
+maxPrice (number): Filter by maximum price
+
+page (number): Page number for pagination (default: 1)
+
+limit (number): Number of items per page (default: 10)
+
+Response: Paginated list of products
+
+GET /api/products/search
+Description: Search products by name or description
+
+Query Parameters:
+
+q (string, required): Search query
+
+Response: Search results
+
+GET /api/products/stats
+Description: Get product statistics
+
+Response: Statistics including counts, categories, and price information
+
+GET /api/products/:id
+Description: Get a specific product by ID
+
+Response: Single product object
+
+POST /api/products
+Description: Create a new product (Protected)
+
+Headers: x-api-key: your-api-key
+
+Body: Product object with required fields
+
+Response: Created product
+
+PUT /api/products/:id
+Description: Update an existing product (Protected)
+
+Headers: x-api-key: your-api-key
+
+Body: Product fields to update
+
+Response: Updated product
+
+DELETE /api/products/:id
+Description: Delete a product (Protected)
+
+Headers: x-api-key: your-api-key
+
+Response: Deleted product
+
+Product Schema
+json
+{
+  "id": "string (auto-generated)",
+  "name": "string (required)",
+  "description": "string (required)",
+  "price": "number (required, non-negative)",
+  "category": "string (required)",
+  "inStock": "boolean (optional, default: true)"
+}
+Example Requests
+Get all products with pagination
+bash
+curl "http://localhost:3000/api/products?page=1&limit=2"
+Filter by category
+bash
+curl "http://localhost:3000/api/products?category=electronics"
+Search products
+bash
+curl "http://localhost:3000/api/products/search?q=laptop"
+Create a new product
+bash
+curl -X POST http://localhost:3000/api/products \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: secret-key-123" \
+  -d '{
+    "name": "New Product",
+    "description": "Product description",
+    "price": 99.99,
+    "category": "electronics",
+    "inStock": true
+  }'
+Update a product
+bash
+curl -X PUT http://localhost:3000/api/products/1 \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: secret-key-123" \
+  -d '{
+    "price": 1099.99,
+    "inStock": false
+  }'
+Error Responses
+The API returns standardized error responses:
+
+json
+{
+  "error": "Error Type",
+  "message": "Human-readable error message",
+  "details": ["Additional error details"] // Optional
+}
+Common HTTP status codes:
+
+200: Success
+
+201: Created
+
+400: Validation Error
+
+401: Unauthorized (Missing API key)
+
+403: Forbidden (Invalid API key)
+
+404: Not Found
+
+500: Internal Server Error
+
+text
+
+## Testing the API
+
+You can test the API using tools like:
+
+1. **Postman** or **Insomnia**
+2. **curl** commands (examples in README)
+3. **Browser** for GET requests
+
+This implementation provides a complete, production-ready Express.js API with all the required features from the assignment, including proper error handling, middleware, authentication, validation, and advanced querying capabilities.
